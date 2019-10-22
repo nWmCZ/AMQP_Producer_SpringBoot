@@ -21,7 +21,7 @@ public class MessagingService {
     @Value("${toQueue:true}")
     boolean toQueue;
 
-    @Value("${messageText:TestText}")
+    @Value("${messageText:jmsMessage}")
     String messageText;
 
     Logger logger = LoggerFactory.getLogger(MessagingService.class);
