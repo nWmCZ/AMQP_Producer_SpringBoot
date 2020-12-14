@@ -18,6 +18,9 @@ public class MessagingService {
     @Value("${queue:scheduledQueue}")
     String queue;
 
+    @Value("${topic:scheduledTopic}")
+    String topic;
+
     @Value("${toQueue:true}")
     boolean toQueue;
 
@@ -39,11 +42,11 @@ public class MessagingService {
             Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
             Destination destination;
+            // Create the destination (Topic or Queue)
             if (toQueue) {
-                // Create the destination (Topic or Queue)
                 destination = session.createQueue(queue);
             } else {
-                destination = session.createTopic(queue);
+                destination = session.createTopic(topic);
             }
 
             // Create a MessageProducer from the Session to the Topic or Queue
@@ -57,7 +60,12 @@ public class MessagingService {
 
                 // Tell the producer to send the message
                 producer.send(message);
-                logger.info("Message sent with MessageId {}, to queue/topic name {}, toQueue: {}", messageId, queue, toQueue);
+
+                if (toQueue) {
+                    logger.info("Message sent with MessageId {}, to queue {}", messageId, queue);
+                } else {
+                    logger.info("Message sent with MessageId {}, to topic {}", messageId, topic);
+                }
             }
 
             // Clean up

@@ -21,9 +21,6 @@ public class Scheduler {
 
     @Scheduled(fixedDelayString = "${scheduler:5000}")
     public void scheduledJob() {
-        logger.info("Scheduled job started");
-
         messagingService.sendMessage(count);
-        logger.info("Scheduler job finished");
     }
 }
